@@ -23,6 +23,8 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
     private val mPaths = ArrayList<CustomPath>()
     private val mUndoPaths = ArrayList<CustomPath>()
 
+    private var mPathDrawingFlag: Boolean = false
+
     init {
         setUpDrawing()
     }
@@ -30,6 +32,14 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
     fun onClickUndo() {
         if (mPaths.size > 0) {
             mUndoPaths.add(mPaths.removeAt(mPaths.size - 1))
+            mPathDrawingFlag = false
+            invalidate()
+        }
+    }
+
+    fun onClickRedo() {
+        if (mUndoPaths.size > 0 && !mPathDrawingFlag) {
+            mPaths.add(mUndoPaths.removeAt(mUndoPaths.size - 1))
             invalidate()
         }
     }
@@ -53,7 +63,6 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
         canvas = Canvas(mCanvasBitmap!!)
     }
 
-    //Change Canvas to Canvas? if it fails
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         canvas.drawBitmap(mCanvasBitmap!!, 0f, 0f, mCanvasPaint)
@@ -96,12 +105,15 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
              MotionEvent.ACTION_UP -> {
                  mPaths.add(mDrawPath!!)
                  mDrawPath = CustomPath(color, mBrushSize)
+                 mPathDrawingFlag = true
+                 mUndoPaths.clear()
              }
 
              else -> return false
          }
 
         invalidate()
+
         return true
     }
 
@@ -116,7 +128,5 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
         mDrawPaint!!.color = color
     }
 
-    internal inner class CustomPath(var color: Int, var brushThickness: Float) : Path() {
-
-    }
+    internal inner class CustomPath(var color: Int, var brushThickness: Float) : Path()
 }
