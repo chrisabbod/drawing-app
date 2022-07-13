@@ -66,7 +66,10 @@ class MainActivity : AppCompatActivity() {
                         Intent.ACTION_PICK,
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI
                     )
-                    openGalleryLauncher.launch(pickIntent)
+
+                    if (permissionName == Manifest.permission.READ_EXTERNAL_STORAGE) {
+                        openGalleryLauncher.launch(pickIntent)
+                    }
 
                 } else {
                     if (permissionName == Manifest.permission.READ_EXTERNAL_STORAGE) {
