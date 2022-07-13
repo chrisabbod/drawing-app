@@ -56,11 +56,6 @@ class MainActivity : AppCompatActivity() {
                 val isGranted = it.value
 
                 if (isGranted) {
-                    Toast.makeText(
-                        this@MainActivity,
-                        "Permission granted now you can read the storage files",
-                        Toast.LENGTH_LONG
-                    ).show()
 
                     val pickIntent = Intent(
                         Intent.ACTION_PICK,
